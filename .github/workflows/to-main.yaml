@@ -1,0 +1,33 @@
+name: workflows-to-main-branch
+
+on:
+  push:
+    branches:
+      - workflows
+
+jobs:
+  workflow-merge-to-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: workflows check
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: operations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          $BRANCH=workflows
+          $TARGET_BRANCH=main
+
+          git fetch origin "$TARGET_BRANCH"
+          git checkout "$TARGET_BRANCH"
+          git merge "origin/$BRANCH" --no-ff -m "chore: auto-merge $BRANCH to $TARGET_BRANCH [skip-cli]"
+          git push origin "$TARGET_BRANCH"
