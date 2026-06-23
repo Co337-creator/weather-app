@@ -1,0 +1,35 @@
+name: branch-push
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - dev
+
+jobs:
+  branch-merge-to-dev:
+    runs-on: ubuntu-latest
+    steps:
+      - name: workflow checks
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: operations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "getting branch"
+          BRANCH={{ github.ref_name }}
+          TARGET_BRANCH="dev"
+
+          git fetch origin "$TARGET_BRANCH"
+          git checkout "$TARGET_BRANCH"
+          git merge "origin/$BRANCH" --no-ff -m "chore: auto-merge $BRANCH into $TARGET_BRANCH [skip-cli]"
+          git push origin "$TARGET_BRANCH"
