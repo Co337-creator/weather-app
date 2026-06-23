@@ -8,6 +8,8 @@ on:
 jobs:
   workflow-merge-to-main:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: workflows check
         uses: actions/checkout@v4
