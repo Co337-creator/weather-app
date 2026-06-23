@@ -24,8 +24,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          $BRANCH=workflows
-          $TARGET_BRANCH=main
+          BRANCH=workflows
+          TARGET_BRANCH=main
 
           git fetch origin "$TARGET_BRANCH"
           git checkout "$TARGET_BRANCH"
